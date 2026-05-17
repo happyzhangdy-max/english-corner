@@ -226,7 +226,7 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
 .tab.active { color:#eaeaea; background:#0f3460; }
 
 /* ===== 游戏模块 ===== */
-#p-game { display:none; flex-direction:column; min-height:calc(100vh - 52px - 62px); overflow:hidden; background:#0a0a18; }
+#p-game { display:none; flex-direction:column; min-height:calc(100vh - 52px - 62px); overflow:hidden; background:var(--bg-base); }
 #p-game.active { display:flex; }
 #gh-world { flex:1; min-height:200px; position:relative; }
 #gh-quiz { flex-shrink:0; }
@@ -1564,7 +1564,7 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
 <div class="page" id="p-scan">
   <div class="scan-header">
     <div class="scan-header-icon">📸</div>
-    <div class="scan-header-title">日文试卷识图翻译</div>
+    <div class="scan-header-title">英语拍照识词</div>
     <div class="scan-header-sub">拍照或选择图片 → 自动识别日文 → 翻译成中文</div>
   </div>
   <!-- 无图片时显示上传区 -->
@@ -1788,9 +1788,8 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
   </div>
 </div>
 
-<script src="data.js?v=1">
-
-<script src="inline.js?v=1">
+<script src="data.js?v=1"></script>
+<script src="inline.js?v=1"></script>
 
 
 

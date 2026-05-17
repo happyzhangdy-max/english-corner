@@ -89,12 +89,12 @@ let curF='cet6',curSort='freq',curG='all',curGSort=null,q=[],ci=0,fl=false,kanji
 function toggleKanji(){kanjiMode=(kanjiMode+1)%2;var btn=document.getElementById('kanjiToggle');if(btn){if(kanjiMode===0)btn.textContent='🔤 标准';else btn.textContent='🔤 音标';btn.classList.toggle('active',kanjiMode!==0)}renderV();if(typeof initVocabTracking==='function')initVocabTracking(false)}
 function setCatMode(m){catMode=m;catSelected=null;renderV();if(typeof initVocabTracking==='function')initVocabTracking(false)}
 // TTS：Web Speech API（修复 Chrome cancel/speak bug）
-var _jaVoice = null;
+var _ttsVoice = null;
 function initTTS(){
     function pick(){
         var vs = speechSynthesis.getVoices();
-        for(var i=0;i<vs.length;i++){if(vs[i].lang&&vs[i].lang.indexOf('ja')===0){_jaVoice=vs[i];return}}
-        _jaVoice=null;
+        for(var i=0;i<vs.length;i++){if(vs[i].lang&&vs[i].lang.indexOf('en')===0){_ttsVoice=vs[i];return}}
+        _ttsVoice=null;
     }
     pick();
     if(speechSynthesis.onvoiceschanged!==undefined) speechSynthesis.onvoiceschanged=pick;
@@ -109,7 +109,7 @@ function _speakNext(){
   var u=new SpeechSynthesisUtterance(item.text);
   u.lang=item.lang||'en-US';u.rate=item.rate||0.9;
   if(item.voice)u.voice=item.voice;
-  else if(_jaVoice)u.voice=_jaVoice;
+  else if(_ttsVoice)u.voice=_ttsVoice;
   u.onend=function(){_speechBusy=false;_speakNext()};
   u.onerror=function(){_speechBusy=false;_speakNext()};
   speechSynthesis.speak(u);

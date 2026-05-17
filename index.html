@@ -1097,6 +1097,23 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
 }
 
 /* ===== 单词大冒险 ===== */
+/* game CSS from japanese-corner */
+#p-game { display:none; flex-direction:column; overflow-y:auto; background:var(--bg-primary); position:fixed; top:52px; left:50%; transform:translateX(-50%); width:100%; max-width:960px; bottom:62px; padding:16px; padding-bottom:80px; }
+#p-game.active { display:flex; }
+#gh-world { flex:1; min-height:200px; position:relative; }
+#gh-quiz { flex-shrink:0; }
+.game-opt-btn:active { transform:scale(0.95) !important; background:rgba(168,85,247,0.15) !important; border-color:#a855f7 !important; }
+.game-opt-btn { -webkit-tap-highlight-color:transparent; user-select:none; }
+@keyframes screenShake { 0%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(3px)} 100%{transform:translateX(0)} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-5px)} 40%{transform:translateX(5px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes bounceIn { 0%{transform:scale(0.3);opacity:0} 50%{transform:scale(1.15)} 70%{transform:scale(0.9)} 100%{transform:scale(1);opacity:1} }
+@keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+@keyframes twinkle { 0%{opacity:0.3} 100%{opacity:1} }
+@keyframes floatTextUp {0%{opacity:1;transform:translate(-50%,-50%) scale(0.5)}30%{opacity:1;transform:translate(-50%,-60%) scale(1.2)}60%{opacity:0.8;transform:translate(-50%,-80%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(0.8)} }
+@keyframes comboPop { 0%{transform:translateX(-50%) scale(0.5);opacity:0} 50%{transform:translateX(-50%) scale(1.3)} 100%{transform:translateX(-50%) scale(1);opacity:1} }
+
 .game-placeholder {
   text-align: center;
   padding: 60px 24px;
@@ -1742,6 +1759,8 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
 
 <script src="data.js?v=1"></script>
 <script src="inline.js?v=1"></script>
+<script src="game/tower-climb.js?v=1"></script>
+<script src="game/boxing.js?v=1"></script>
 
 
 
@@ -1869,7 +1888,7 @@ document.addEventListener('click',function(e){
 })();
 
 /* ===== 主题切换 ===== */
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
   var toggle = document.getElementById('theme-toggle');
   if (!toggle) return;
   var stored = localStorage.getItem('theme');
@@ -1882,7 +1901,7 @@ document.addEventListener('click',function(e){
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
   });
-})();
+});
 </script>
 
 <!-- 主题切换按钮 -->

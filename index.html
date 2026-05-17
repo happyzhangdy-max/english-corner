@@ -442,7 +442,7 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
 /* 汉字切换：三级模式（不影响定位的元素） */
 .vh1 .vm { display:none; }
 .vh2 .vw { visibility:hidden; }
-.vh2 .vr { font-size:22px; font-weight:700; color:#fff; margin-bottom:6px; padding:4px 0; }
+.vh2 .vr { font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:6px; padding:4px 0; }
 .vh2 .vm { display:none; }
 .ol { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:200; opacity:0; pointer-events:none; transition:opacity 0.3s; display:none; }
 .ol.open { opacity:1; pointer-events:all; display:block; }
@@ -573,7 +573,7 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
 
 /* --- 浏览学习：卡片折叠状态 --- */
 .vc-fold .vw { visibility:hidden; }
-.vc-fold .vr { font-size:22px; font-weight:700; color:#fff; margin-bottom:6px; padding:4px 0; }
+.vc-fold .vr { font-size:22px; font-weight:700; color:var(--text-primary); margin-bottom:6px; padding:4px 0; }
 .vc-fold .vm { display:none; }
 /* ===== 移动端适配 ===== */
 @media(max-width:768px){

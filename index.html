@@ -838,14 +838,18 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
   -webkit-backdrop-filter: blur(20px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);
   border: 1px solid rgba(0, 0, 0, 0.04);
-  position: fixed;
-  bottom: 0;
+  position: fixed !important;
+  bottom: 0 !important;
   left: 0;
   right: 0;
-  z-index: 200;
+  z-index: 9999;
   max-width: 480px;
   left: 50%;
   transform: translateX(-50%);
+}
+[data-theme="dark"] .bottom-nav {
+  background: rgba(24, 24, 29, 0.88);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 .nav-item {
   display: flex;
@@ -1092,6 +1096,71 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
   letter-spacing: 0.02em;
 }
 
+/* ===== 单词大冒险 ===== */
+.game-placeholder {
+  text-align: center;
+  padding: 60px 24px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.game-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+.game-placeholder h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1D1D1F;
+  margin: 0 0 8px;
+}
+.game-placeholder p {
+  font-size: 14px;
+  color: #6B6B6B;
+  margin: 0 0 32px;
+}
+.game-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 280px;
+  margin: 0 auto;
+}
+.game-btn {
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #FFFFFF;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 200ms ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.game-btn:hover {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+  transform: translateY(-1px);
+}
+.game-btn:active {
+  transform: scale(0.97);
+}
+[data-theme="dark"] .game-placeholder h3 { color: #F1F0ED; }
+[data-theme="dark"] .game-btn {
+  background: #18181D;
+  border-color: rgba(255,255,255,0.1);
+  color: #F1F0ED;
+}
+
+/* ===== 自动播放（强制深色高对比度） ===== */
+#p-autoplay {
+  background: #0F172A;
+  color: #E2E8F0;
+  min-height: 100%;
+}
+[data-theme="dark"] #p-autoplay {
+  background: #0B1121;
+}
+
 </style>
 </head>
 <body>
@@ -1121,6 +1190,10 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
       <button class="nav-item" data-section="tools" onclick="go('vocab')">
         <span class="nav-item__icon">🔧</span>
         <span class="nav-item__label">工具</span>
+      </button>
+      <button class="nav-item" data-section="main" onclick="go('game')">
+        <span class="nav-item__icon">🎮</span>
+        <span class="nav-item__label">冒险</span>
       </button>
       <button class="nav-item" data-section="mine">
         <span class="nav-item__icon">👤</span>
@@ -1203,7 +1276,7 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
     </div>
     <div class="home-card" onclick="go('autoplay')">
       <div class="home-card-icon">📚</div>
-      <div class="home-card-label">免费词库</div>
+      <div class="home-card-label">自动背单词</div>
       <div class="home-card-desc">考级全免费，0元学</div>
     </div>
     <div class="home-card" onclick="go('game')">
@@ -1420,7 +1493,21 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
 </div>
 
 <!-- ===== 游戏页 ===== -->
-<div class="page" id="p-game"></div>
+<div class="page" id="p-game">
+  <div class="game-placeholder">
+    <div class="game-icon">🎮</div>
+    <h3>单词大冒险</h3>
+    <p>选择一个难度，开始冒险吧</p>
+    <div class="game-levels">
+      <button class="game-btn" onclick="startGame('zk')">🌱 基础</button>
+      <button class="game-btn" onclick="startGame('cet4')">🔥 四级</button>
+      <button class="game-btn" onclick="startGame('cet6')">⚡ 六级</button>
+      <button class="game-btn" onclick="startGame('ielts')">💎 雅思</button>
+      <button class="game-btn" onclick="startGame('gre')">👑 GRE</button>
+    </div>
+    <button class="study-btn" onclick="go('home')" style="margin-top:24px;padding:12px 32px;border-radius:12px;border:none;background:#3B82F6;color:#fff;font-size:15px;font-weight:600;cursor:pointer">← 返回首页</button>
+  </div>
+</div>
 
 <!-- ===== 自动播放 ===== -->
 <div class="page" id="p-autoplay"></div>

@@ -27,10 +27,11 @@ function go(p){closeD();closePlanModal();
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById('p-'+p).classList.add('active');
   // Update bottom nav active state
-  document.querySelectorAll('.bottombar__item').forEach(x=>x.classList.remove('bottombar__item--active'));
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
   var sectionMap={'home':'main','vocab':'main','review':'main','game':'main','autoplay':'main','grammar':'tools','quiz':'tools','book':'tools','wrong':'tools','scan':'tools'};
   var sec=sectionMap[p]||'main';
-  document.querySelector('.bottombar__item[data-section="'+sec+'"]').classList.add('bottombar__item--active');
+  var activeNav = document.querySelector('.nav-item[data-section="'+sec+'"]');
+  if (activeNav) activeNav.classList.add('active');
   // Update topbar title
   var titleMap={'home':'首页','vocab':'单词墙','grammar':'背语法','review':'复习','book':'生词本','quiz':'真题训练','wrong':'错题本','autoplay':'自动播放','game':'闯关','scan':'拍照识图'};
   var tt=document.getElementById('topbarTitle');
@@ -64,12 +65,12 @@ function closeD(){document.getElementById('dw').classList.remove('open');documen
 function renderG(){const f=curG;let data=f==='all'?GRAMMAR_DATA:GRAMMAR_DATA.filter(g=>g.level===f);if(curGSort==='random')data=[...data].sort(function(){return Math.random()-0.5});const filtered=curGMark?data.filter(function(g){var m=getGMarks()[g.id];return m===curGMark}):data;const g=document.getElementById('grammarL');g.innerHTML='';filtered.forEach(gr=>{const d=document.createElement('div');d.className='gc';const fbc=fc(0);const ss=st(0);const gMark=getGMarks()[gr.id];const gBook=getGBook().indexOf(gr.id)>=0;d.innerHTML='<div class="gh"><span class="gp">'+gr.pattern+'</span><span class="gb '+(gr.level==='cet4'?'bn-cet4':'bn-cet6')+'">'+(levelLabel[gr.level]||gr.level.toUpperCase())+'</span><span class="fb '+fbc+'">'+ss+' '+0+'次</span></div><div class="gm">'+gr.meaning+'</div><div class="gd">'+(gr.desc||'')+'</div><div class="eb"><div class="ej">'+(gr.definition||'')+'</div><div class="er">'+(''||'')+'</div><div class="ec">'+('')+'</div></div><div class="gf"><button class="btn bs" style="font-size:11px;padding:5px 10px" onclick="event.stopPropagation();speakGP('+gr.id+')">🔊 朗读</button><button class="btn bg" style="font-size:11px;padding:5px 10px" onclick="event.stopPropagation();markG('+gr.id+')">✅ 掌握</button><span class="vbf" data-gid="'+gr.id+'" onclick="event.stopPropagation();toggleGBook('+gr.id+')" style="font-size:14px;margin-left:6px">'+(gBook?'⭐':'☆')+'</span><span class="vm-btn-group" style="margin-left:4px"><span class="vm-btn" data-gid="'+gr.id+'" data-color="red" onclick="event.stopPropagation();toggleGMark('+gr.id+',\'red\');return false" style="'+(gMark==='red'?'opacity:1;border-color:#e94560':'')+'">🔴</span><span class="vm-btn" data-gid="'+gr.id+'" data-color="yellow" onclick="event.stopPropagation();toggleGMark('+gr.id+',\'yellow\');return false" style="'+(gMark==='yellow'?'opacity:1;border-color:#f5a623':'')+'">🟡</span><span class="vm-btn" data-gid="'+gr.id+'" data-color="green" onclick="event.stopPropagation();toggleGMark('+gr.id+',\'green\');return false" style="'+(gMark==='green'?'opacity:1;border-color:#4ecca3':'')+'">🟢</span></span></div>';if(_grammarFold)d.classList.add('gc-fold');d.onclick=function(){speakGP(gr.id)};g.appendChild(d)})}
 function setG(f,el){curG=f;document.querySelectorAll('#p-grammar .st2 .tab').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderG()}
 var curGMark=null,_grammarFold=false,curVMark=null;
-function markG(id){let gc=parseInt(localStorage.getItem('gc')||'0');gc++;localStorage.setItem('gc',gc);showT('✅ 已掌握！')}
-function getGMarks(){try{return JSON.parse(localStorage.getItem('gm')||'{}')}catch(e){return{}}}
-function setGMarks(m){localStorage.setItem('gm',JSON.stringify(m))}
+function markG(id){let gc=parseInt(localStorage.getItem('en_gc')||'0');gc++;localStorage.setItem('en_gc',gc);showT('✅ 已掌握！')}
+function getGMarks(){try{return JSON.parse(localStorage.getItem('en_gm')||'{}')}catch(e){return{}}}
+function setGMarks(m){localStorage.setItem('en_gm',JSON.stringify(m))}
 function toggleGMark(id,c){var m=getGMarks();m[id]=m[id]===c?null:c;setGMarks(m);renderG()}
-function getGBook(){try{return JSON.parse(localStorage.getItem('gb')||'[]')}catch(e){return[]}}
-function setGBook(b){localStorage.setItem('gb',JSON.stringify(b))}
+function getGBook(){try{return JSON.parse(localStorage.getItem('en_gb')||'[]')}catch(e){return[]}}
+function setGBook(b){localStorage.setItem('en_gb',JSON.stringify(b))}
 function toggleGBook(id){var b=getGBook();var i=b.indexOf(id);i>=0?b.splice(i,1):b.push(id);setGBook(b);renderG()}
 function setGMark(c,el){curGMark=curGMark===c?null:c;document.querySelectorAll('#p-grammar .st3 .tab').forEach(function(x){x.classList.toggle('active',x===el&&curGMark)});renderG()}
 function toggleGrammarDisplay(){_grammarFold=!_grammarFold;document.getElementById('grammarToggle').textContent=_grammarFold?'🔤 展开':'🔤 显示切换';renderG()}
@@ -632,11 +633,11 @@ function startPlanStudy(idx){
   if(!plans[idx])return;
   var plan=plans[idx];
   // 将计划设置同步到自动播放
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
   saved.levels=plan.levels;
   saved.count=plan.daily;
   saved.lvlOn=true;
-  localStorage.setItem('ap_settings',JSON.stringify(saved));
+  localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   go('autoplay');
 }
 function resumeLastSession(){
@@ -644,11 +645,11 @@ function resumeLastSession(){
   try{session=JSON.parse(localStorage.getItem('en_session'))}catch(e){}
   if(!session){showT('没有保存的学习进度');return}
   if(session.filter){
-    var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+    var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
     saved.levels=[session.filter];
     saved.count=50;
     saved.lvlOn=true;
-    localStorage.setItem('ap_settings',JSON.stringify(saved));
+    localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   }
   go('autoplay');
 }
@@ -687,7 +688,7 @@ function renderAutoPlayOptions(){
   var c=document.getElementById('p-autoplay');if(!c)return;
   var lvls=['gk','cet4','cet6','ky','ielts'];
   var lvlNames={gk:'高中',cet4:'四级',cet6:'六级',ky:'考研',ielts:'雅思'};
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
   var selLvls=saved.levels||['cet4','cet6','ielts'];
   var selCats=saved.categories||[];
   var speed=saved.speed||1;
@@ -773,30 +774,30 @@ function _apToggle(triggerEl,bodyId){
 
 // 考级分类勾选切换
 function _apToggleLvlSection(){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
   saved.lvlOn=!saved.lvlOn;
   if(!saved.lvlOn&&!saved.catOn){saved.lvlOn=true} // 至少保留一个
-  localStorage.setItem('ap_settings',JSON.stringify(saved));
+  localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   renderAutoPlayOptions();
 }
 
 // 场景分类勾选切换
 function _apToggleCatSection(){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
   saved.catOn=!saved.catOn;
   if(!saved.lvlOn&&!saved.catOn){saved.catOn=true} // 至少保留一个
-  localStorage.setItem('ap_settings',JSON.stringify(saved));
+  localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   renderAutoPlayOptions();
 }
 
 // 考级点击
 function _apToggleLvl(el,lvl){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
   var lvls=saved.levels||['cet4','cet6','ielts'];
   var idx=lvls.indexOf(lvl);
   if(idx>=0)lvls.splice(idx,1);else lvls.push(lvl);
   if(lvls.length===0)lvls=['cet4','cet6','ielts'];
-  saved.levels=lvls;localStorage.setItem('ap_settings',JSON.stringify(saved));
+  saved.levels=lvls;localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   el.classList.toggle('ap-tag-on');
   el.style.background=el.classList.contains('ap-tag-on')?'linear-gradient(135deg,#e94560,#ff6b9d)':'rgba(255,255,255,0.06)';
   el.style.color=el.classList.contains('ap-tag-on')?'#fff':'#64748b';
@@ -804,12 +805,12 @@ function _apToggleLvl(el,lvl){
 
 // 场景点击
 function _apToggleCat(el){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
   var cats=saved.categories||[];
   var cat=el.getAttribute('data-cat');
   var idx=cats.indexOf(cat);
   if(idx>=0)cats.splice(idx,1);else cats.push(cat);
-  saved.categories=cats;localStorage.setItem('ap_settings',JSON.stringify(saved));
+  saved.categories=cats;localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   el.classList.toggle('ap-tag-on');
   el.style.background=el.classList.contains('ap-tag-on')?'linear-gradient(135deg,#a855f7,#7c3aed)':'rgba(255,255,255,0.06)';
   el.style.color=el.classList.contains('ap-tag-on')?'#fff':'#64748b';
@@ -817,38 +818,38 @@ function _apToggleCat(el){
 
 // 全选场景
 function _apCatAll(){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
-  saved.categories=[];localStorage.setItem('ap_settings',JSON.stringify(saved));
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
+  saved.categories=[];localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   document.querySelectorAll('#ap-cat-body .ap-tag').forEach(function(el){el.classList.add('ap-tag-on');el.style.background='linear-gradient(135deg,#a855f7,#7c3aed)';el.style.color='#fff'});
 }
 
 // 形式
 function _apSetFormat(el,f){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
-  saved.format=f;localStorage.setItem('ap_settings',JSON.stringify(saved));
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
+  saved.format=f;localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   document.querySelectorAll('[data-format]').forEach(function(x){x.classList.remove('ap-tag-on');x.style.background='rgba(255,255,255,0.06)';x.style.color='#64748b'});
   el.classList.add('ap-tag-on');el.style.background='linear-gradient(135deg,#6366f1,#8b5cf6)';el.style.color='#fff';
 }
 
 // 速度
 function _apSetSpeed(el,s){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
-  saved.speed=s;localStorage.setItem('ap_settings',JSON.stringify(saved));
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
+  saved.speed=s;localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   document.querySelectorAll('[data-speed]').forEach(function(x){x.classList.remove('ap-tag-on');x.style.background='rgba(255,255,255,0.06)';x.style.color='#64748b'});
   el.classList.add('ap-tag-on');el.style.background='linear-gradient(135deg,#4ecca3,#2ecc71)';el.style.color='#fff';
 }
 
 // 数量
 function _apSetCount(el,n){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
-  saved.count=n;localStorage.setItem('ap_settings',JSON.stringify(saved));
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
+  saved.count=n;localStorage.setItem('en_ap_settings',JSON.stringify(saved));
   document.querySelectorAll('[data-count]').forEach(function(x){x.classList.remove('ap-tag-on');x.style.background='rgba(255,255,255,0.06)';x.style.color='#64748b'});
   el.classList.add('ap-tag-on');el.style.background='linear-gradient(135deg,#f5a623,#ffd700)';el.style.color='#000';
 }
 
 // 开始自动播放
 function startVocabAutoPlay(){
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
   var selLvls=saved.levels||['cet4','cet6','ielts'];
   var selCats=saved.categories||[];
   var speed=saved.speed||1;
@@ -900,7 +901,7 @@ function vApShowCard(){
   if(!_vApQueue||_vApQueue.length===0)return;
   var w=_vApQueue[_vApIdx];
   if(!w)return;
-  var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+  var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
   var format=saved.format||'word';
   var showSent=(format==='word_sent');
   clearSpeechQueue();
@@ -943,7 +944,7 @@ function vApTogglePause(){
   if(_vApPaused){
     clearTimeout(_vApTimer);_vApTimer=null;
   }else{
-    var saved=JSON.parse(localStorage.getItem('ap_settings')||'{}');
+    var saved=JSON.parse(localStorage.getItem('en_ap_settings')||'{}');
     var format=saved.format||'word';
     var baseTime=format==='word_sent'?3500:2000;
     var gap=_vApSpeed*1000;

@@ -675,7 +675,7 @@ function gApPrev(){if(!_gApQueue||_gApQueue.length===0)return;clearSpeechQueue()
 function gApNext(){if(!_gApQueue||_gApQueue.length===0)return;clearSpeechQueue();clearTimeout(_gApTimer);_gApTimer=null;var cur=_gApIdx-(_gApPaused?0:1);if(cur>=_gApQueue.length-1)return;_gApIdx=cur+1;_gApPaused=false;gApShowCard()}
 function gApToggleBook(){var gr=_gApQueue[_gApIdx-(_gApPaused?0:1)];if(!gr)return;toggleGBook(gr.id);gApSyncMarks(gr)}
 function gApToggleMark(c){var gr=_gApQueue[_gApIdx-(_gApPaused?0:1)];if(!gr)return;toggleGMark(gr.id,c);gApSyncMarks(gr)}
-function gApSyncMarks(gr){if(!gr)return;var b=(JSON.parse(localStorage.getItem('gb')||'[]')||[]).indexOf(gr.id)>=0;document.getElementById('gApBmk').textContent=b?'⭐':'☆';var m=JSON.parse(localStorage.getItem('gm')||'{}')[gr.id];document.querySelectorAll('#gApScreen .ap-marks .vm-btn').forEach(function(x){var c=x.getAttribute('data-color');var a=m===c;x.classList.remove('vm-btn-red','vm-btn-yellow','vm-btn-green','vm-btn-active');if(a){x.classList.add('vm-btn-'+c,'vm-btn-active');x.style.borderColor='';x.style.background='';x.style.opacity=''}else{x.style.borderColor='transparent';x.style.background='transparent';x.style.opacity='0.4'}})}
+function gApSyncMarks(gr){if(!gr)return;var b=(JSON.parse(localStorage.getItem('en_gb')||'[]')||[]).indexOf(gr.id)>=0;document.getElementById('gApBmk').textContent=b?'⭐':'☆';var m=JSON.parse(localStorage.getItem('en_gm')||'{}')[gr.id];document.querySelectorAll('#gApScreen .ap-marks .vm-btn').forEach(function(x){var c=x.getAttribute('data-color');var a=m===c;x.classList.remove('vm-btn-red','vm-btn-yellow','vm-btn-green','vm-btn-active');if(a){x.classList.add('vm-btn-'+c,'vm-btn-active');x.style.borderColor='';x.style.background='';x.style.opacity=''}else{x.style.borderColor='transparent';x.style.background='transparent';x.style.opacity='0.4'}})}
 
 // ============================================================
 // 单词自动播放
@@ -991,9 +991,9 @@ function vApToggleBook(){
 function vApToggleMark(c){
   var w=_vApQueue[_vApIdx];
   if(!w)return;
-  var mk=JSON.parse(localStorage.getItem('mk')||'{}');
+  var mk=JSON.parse(localStorage.getItem('en_mk')||'{}');
   mk[w.id]=mk[w.id]===c?null:c;
-  localStorage.setItem('mk',JSON.stringify(mk));
+  localStorage.setItem('en_mk',JSON.stringify(mk));
   vApSyncMarks(w);
 }
 
@@ -1001,7 +1001,7 @@ function vApSyncMarks(w){
   if(!w)return;
   var b=getBook().some(function(x){return x.type==='vocab'&&x.id===w.id});
   document.getElementById('gApBmk').textContent=b?'⭐':'☆';
-  var mk=JSON.parse(localStorage.getItem('mk')||'{}')[w.id];
+  var mk=JSON.parse(localStorage.getItem('en_mk')||'{}')[w.id];
   document.querySelectorAll('#gApScreen .ap-marks .vm-btn').forEach(function(x){
     var c=x.getAttribute('data-color');
     var a=mk===c;
@@ -1106,7 +1106,7 @@ function doAISearch(q,localResults){
   
   // AI 搜索缓存
   var cacheKey = 'ai_srch_'+q.toLowerCase().trim();
-  var cacheData = JSON.parse(localStorage.getItem('_search_cache')||'{}');
+  var cacheData = JSON.parse(localStorage.getItem('en_search_cache')||'{}');
   var cached = cacheData[cacheKey];
   if(cached && Date.now() - cached.ts < 1800000){ // 30 min TTL
     var _le=document.getElementById('aiSearchLoading');if(_le)_le.remove();
@@ -1171,7 +1171,7 @@ function doAISearch(q,localResults){
         el.innerHTML=aiHtml+'<div style="margin:6px 4px 2px;border-top:1px solid rgba(255,255,255,0.06)"></div>'+el.innerHTML;
       }
       // 缓存 AI 结果
-      try{var _c=JSON.parse(localStorage.getItem('_search_cache')||'{}');_c[cacheKey]={html:aiHtml,ts:Date.now()};localStorage.setItem('_search_cache',JSON.stringify(_c))}catch(e){}
+      try{var _c=JSON.parse(localStorage.getItem('en_search_cache')||'{}');_c[cacheKey]={html:aiHtml,ts:Date.now()};localStorage.setItem('en_search_cache',JSON.stringify(_c))}catch(e){}
       
       // 自动加入生词本
       if (!alreadyInBook && !VOCAB.some(function(x){ return x.word===jpText; })) {
@@ -1235,7 +1235,7 @@ function doAISearch(q,localResults){
         el.innerHTML=aiHtml+el.innerHTML;
       }
       // 缓存 AI 结果
-      try{var _c=JSON.parse(localStorage.getItem('_search_cache')||'{}');_c[cacheKey]={html:aiHtml,ts:Date.now()};localStorage.setItem('_search_cache',JSON.stringify(_c))}catch(e){}
+      try{var _c=JSON.parse(localStorage.getItem('en_search_cache')||'{}');_c[cacheKey]={html:aiHtml,ts:Date.now()};localStorage.setItem('en_search_cache',JSON.stringify(_c))}catch(e){}
       
       // 不自动加生词本，用户可手动点收藏按钮
     }
@@ -1630,7 +1630,7 @@ function copyScanResult(){
 function saveScanHistory(jp,cn){
   _scanHistory.unshift({jp:jp,cn:cn,time:new Date().toLocaleString()});
   if(_scanHistory.length>10)_scanHistory=_scanHistory.slice(0,10);
-  localStorage.setItem('scanHist',JSON.stringify(_scanHistory));
+  localStorage.setItem('en_scan_hist',JSON.stringify(_scanHistory));
   renderScanHistory();
 }
 
@@ -1655,7 +1655,7 @@ function renderScanHistory(){
 
 function loadScanHistory(){
   try{
-    var h=localStorage.getItem('scanHist');
+    var h=localStorage.getItem('en_scan_hist');
     if(h)_scanHistory=JSON.parse(h);
   }catch(e){_scanHistory=[]}
   renderScanHistory();

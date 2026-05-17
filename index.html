@@ -211,28 +211,27 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
 .hero { display:none; }
 .hero::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg, transparent 60%, #0f0f1a 100%); }
 
-.vwb { display:block; background:linear-gradient(135deg,#1a1a3e,#0f3460); border:1px solid rgba(168,85,247,0.3); border-radius:14px; padding:28px 20px; margin-bottom:16px; cursor:pointer; text-align:center; transition:opacity 0.3s,transform 0.3s,background 0.3s,border-color 0.3s; position:relative; overflow:hidden; }
-.vwb:hover { border-color:#a855f7; transform:translateY(-2px); box-shadow:0 8px 30px rgba(168,85,247,0.2); }
-.vwb::after { content:''; position:absolute; top:-50%; right:-50%; width:100%; height:200%; background:linear-gradient(45deg,transparent 40%,rgba(168,85,247,0.05) 50%,transparent 60%); transition:opacity 0.6s,transform 0.6s,background 0.6s; }
-.vwb:hover::after { transform:translateX(30px); }
+.vwb { display:block; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:14px; padding:28px 20px; margin-bottom:16px; cursor:pointer; text-align:center; transition:transform 0.2s ease,border-color 0.2s ease,box-shadow 0.2s ease; position:relative; }
+.vwb:hover { border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-glow); transform:translateY(-2px); }
+.vwb:active { transform:scale(0.98); }
 .vwb-icon { font-size:36px; display:block; margin-bottom:6px; }
 .vwb-title { font-size:20px; font-weight:800; color:var(--text-primary); letter-spacing:2px; }
-.vwb-sub { font-size:12px; color:#888; margin-top:6px; letter-spacing:1px; }
+.vwb-sub { font-size:12px; color:var(--text-secondary); margin-top:6px; }
 
 
 
-.nav-more { display:none; position:absolute; top:100%; right:0; background:rgba(26,26,46,0.97); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:6px; z-index:200; min-width:160px; box-shadow:0 8px 30px rgba(0,0,0,0.4); }
+.nav-more { display:none; position:absolute; top:100%; right:0; background:var(--bg-surface); backdrop-filter:blur(20px); border:1px solid var(--border-subtle); border-radius:12px; padding:6px; z-index:200; min-width:160px; box-shadow:var(--shadow-card); }
 .nav-more.show { display:block; }
-.nav-more-item { display:block; width:100%; text-align:left; background:none !important; border:none !important; color:#aaa !important; padding:8px 14px !important; font-size:13px !important; margin:2px 0 !important; border-radius:8px !important; }
-.nav-more-item:hover { background:rgba(168,85,247,0.15) !important; color:#eaeaea !important; }
+.nav-more-item { display:block; width:100%; text-align:left; background:none !important; border:none !important; color:var(--text-secondary) !important; padding:8px 14px !important; font-size:13px !important; margin:2px 0 !important; border-radius:8px !important; }
+.nav-more-item:hover { background:var(--bg-hover) !important; color:var(--text-primary) !important; }
 
 
 
 
 
-.tab { padding:5px 12px; border-radius:6px; cursor:pointer; font-size:12px; color:#888; border:none; background:transparent; transition:0.2s; white-space:nowrap; flex-shrink:0; }
-.tab:hover { color:#eaeaea; }
-.tab.active { color:#eaeaea; background:#0f3460; }
+.tab { padding:5px 12px; border-radius:6px; cursor:pointer; font-size:12px; color:var(--text-secondary); border:none; background:transparent; transition:0.2s; white-space:nowrap; flex-shrink:0; }
+.tab:hover { color:var(--text-primary); background:var(--bg-hover); }
+.tab.active { color:var(--text-primary); background:var(--brand-light); }
 
 /* ===== 游戏模块 ===== */
 #p-game { display:none; flex-direction:column; min-height:calc(100vh - 52px - 62px); overflow:hidden; background:var(--bg-base); }
@@ -285,7 +284,7 @@ body::after { content:''; position:fixed; inset:0; background:linear-gradient(18
   100% { transform:translateX(-50%) scale(1); opacity:1 }
 }
 .main { max-width:960px; margin:0 auto; padding:16px; }
-.page { display:none; max-width:960px; margin:0 auto; padding:16px; background: transparent; }
+.page { display:none; max-width:960px; margin:0 auto; padding:16px; padding-bottom:90px; background: transparent; }
 .page.active { display:block; }
 @media(max-width:600px){ .page,.main{ padding:12px; padding-top:60px; padding-bottom:90px; } .tab{ font-size:11px; padding:4px 10px; } .vwb{ padding:20px 14px; } .hero{ height:160px; } }
 .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin-bottom:16px; }
